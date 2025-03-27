@@ -50,10 +50,10 @@ def process_html_file(html_url):
         # Process and clean the file after uploading
         process_and_clean_data()
 
-        return "✅ File processed, cleaned, and uploaded successfully!"
+        return "File processed, cleaned, and uploaded successfully!"
 
     except Exception as e:
-        return f"❌ Error: {e}"
+        return f"Error: {e}"
 
     finally:
         driver.quit()
@@ -64,7 +64,7 @@ def upload_to_gcs(source_file, destination_blob):
     bucket = storage_client.bucket(GCP_BUCKET_NAME)
     blob = bucket.blob(destination_blob)
     blob.upload_from_filename(source_file)
-    print(f"✅ File uploaded to GCP: {destination_blob}")
+    print(f"File uploaded to GCP: {destination_blob}")
 
 # Function to clean and process data
 def process_and_clean_data():
@@ -77,7 +77,7 @@ def process_and_clean_data():
     data = blob.download_as_bytes()
     df = pd.read_excel(io.BytesIO(data))
 
-    print("✅ Data fetched successfully!")
+    print("Data fetched successfully!")
 
     # Ensure "Comments" column exists
     if "Comments" not in df.columns:
@@ -115,7 +115,7 @@ def process_and_clean_data():
     # Reset index
     df_cleaned.reset_index(drop=True, inplace=True)
 
-    print("✅ Data cleaned successfully!")
+    print("Data cleaned successfully!")
 
     # Save cleaned DataFrame to a new Excel file
     df_cleaned.to_excel(CLEANED_FILE, index=False)
@@ -123,7 +123,7 @@ def process_and_clean_data():
     # Upload cleaned file to GCP in the "Processed" folder
     upload_to_gcs(CLEANED_FILE, CLEANED_FILE)
 
-    print(f"✅ Cleaned data uploaded to GCP as {CLEANED_FILE}!")
+    print(f"Cleaned data uploaded to GCP as {CLEANED_FILE}!")
 
 # Flask route for the frontend
 @app.route("/")
